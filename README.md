@@ -1,25 +1,79 @@
-# Dashboard Fatturato 2026 — PWA
+# Dashboard Fatturato medi Italia — PWA
 
-## Come pubblicare su GitHub Pages
+## Link app
+**https://nicolosantoro190595-design.github.io/Fatturato**
 
-1. Vai su github.com → "New repository" → nome: `fatturato`
-2. Spunta "Public" → clicca "Create repository"
-3. Clicca "Add file" → "Upload files"
-4. Carica tutti e 4 i file: `index.html`, `manifest.json`, `sw.js`, `icon.png`
-5. Scrivi un commit message (es. "prima versione") → clicca "Commit changes"
-6. Vai su Settings → Pages → Source: "Deploy from branch" → Branch: main → Save
-7. Dopo 1-2 minuti il link è attivo: `https://TUO_USERNAME.github.io/fatturato`
+Installata come app su iPhone: icona sulla schermata home, funziona offline.
 
-## Come installare come app su iPhone
+---
 
-1. Apri il link in Safari
-2. Tocca l'icona condividi (quadrato con freccia in basso)
-3. Scorri e tocca "Aggiungi a schermata Home"
-4. Tocca "Aggiungi" — appare l'icona come una vera app!
+## Cosa contiene la dashboard
 
-## Come aggiornare ogni settimana
+- **KPI mensili e YTD** — fatturato, crescita %, delta vs 2025 e budget
+- **Grafico andamento mensile** — 2026 vs 2025 con filtri (entrambi / solo 2026 / delta €)
+- **Tabella agenti per mese** — selezionabile indipendentemente
+- **Ranking agenti** — delta % YTD e delta € YTD affiancati
+- **Direzione** — KPI mese + YTD e grafico annuale
+- **Spese Trasporto** — KPI mese + YTD e grafico annuale
+- **Dettaglio agente × anno** — grafico mensile 2026 vs 2025 e 3 mini KPI
 
-1. Vai su github.com/TUO_USERNAME/fatturato
-2. Clicca su `index.html` → icona matita (Edit)
-3. Oppure carica il nuovo file con "Add file" → "Upload files"
-4. L'app si aggiorna automaticamente in 1-2 minuti
+---
+
+## Come aggiornare ogni mese (procedura completa)
+
+### Passo 1 — Manda il file Excel a Claude
+Apri questa chat (o un nuovo Progetto Claude "Dashboard medi Italia") e manda il file `FATTURATO_MESE_2026.xlsx`. Claude genera un nuovo `index.html` con tutti i dati aggiornati hardcoded.
+
+### Passo 2 — Carica su GitHub
+1. Vai su `github.com/nicolosantoro190595-design/Fatturato`
+2. Clicca **Add file → Upload files**
+3. Trascina il nuovo `index.html`
+4. Clicca **Commit changes**
+5. Aspetta 1-2 minuti
+
+### Passo 3 — Aggiorna l'app sul telefono
+Chiudi e riapri l'icona dalla schermata home — si aggiorna automaticamente.
+
+---
+
+## Alternativa rapida (senza GitHub)
+
+1. Apri la dashboard nel browser
+2. Trascina il file Excel nella zona tratteggiata in cima
+3. I dati si aggiornano subito in quella sessione
+4. ⚠️ Non viene salvato alla chiusura — serve il Passo 2 per renderlo permanente
+
+---
+
+## File nel repository
+
+| File | Descrizione |
+|------|-------------|
+| `index.html` | Dashboard completa (tutto in un file — dati + grafici + logica) |
+| `manifest.json` | Configurazione PWA per installazione su iPhone |
+| `sw.js` | Service worker per funzionamento offline |
+| `icon.png` | Icona app sulla schermata home |
+| `README.md` | Questo file |
+
+---
+
+## Dati hardcoded (aggiornati a Maggio 2026)
+
+- Totali mensili: **gen-mag 2026** reali + f25 tutti i 12 mesi
+- Agenti: **22 agenti** con f26/f25/budget per gen-mag, f25 per giu-dic
+- Direzione e Trasporto: completi per tutti i 12 mesi
+- Ranking YTD: basato su foglio GENERALE dell'Excel
+
+---
+
+## Note tecniche
+
+- Chart.js e SheetJS sono **inline nel file** — funziona senza internet
+- Il parser Excel legge `TOTALE VENDITE` per i totali mensili
+- I mesi futuri (f26=0 o null) vengono ignorati automaticamente
+- Il mese attivo si imposta sull'ultimo con dati reali
+- 22 agenti incluso FIORA-PIGHETTI (PV-LO) che è una zona separata
+
+---
+
+*Ultima versione: Maggio 2026*
