@@ -429,6 +429,16 @@
     </div>
   </div>
 
+  <div class="card">
+    <div class="card-header">
+      <span class="card-title">Ranking — Delta € YTD</span>
+      <span class="card-badge">2026 vs 2025</span>
+    </div>
+    <div class="card-body">
+      <div class="rank-wrap" id="rankWrapEuro"></div>
+    </div>
+  </div>
+
   <div class="card full">
     <div class="card-header">
       <span class="card-title">Agente — Dettaglio Anno</span>
@@ -693,6 +703,40 @@ function renderRank() {
   }).join('');
 }
 
+
+// ── RANKING DELTA € ───────────────────────────────────────────────────────────
+function renderRankEuro() {
+  const rankData = agentsMaggio.map(a => {
+    let ytd26 = 0, ytd25partial = 0, countMesi = 0;
+    MONTHS.forEach(m => {
+      const md = agentMonthly[a.agente]?.[m];
+      if (!md) return;
+      if (md.f26 != null) { ytd26 += md.f26; ytd25partial += md.f25; countMesi++; }
+    });
+    const delta = ytd26 - ytd25partial;
+    return { agente: a.agente, zona: a.zona, delta };
+  });
+
+  // Ordina per delta € decrescente
+  const sorted = rankData.sort((a,b) => b.delta - a.delta);
+  const maxAbs = Math.max(...sorted.map(a => Math.abs(a.delta)));
+
+  document.getElementById('rankWrapEuro').innerHTML = sorted.map(a => {
+    const isPos = a.delta >= 0;
+    const barW  = maxAbs > 0 ? (Math.abs(a.delta) / maxAbs * 100).toFixed(1) : 0;
+    const color = isPos ? 'var(--accent)' : 'var(--accent2)';
+    const sign  = isPos ? '+' : '';
+    return `
+      <div class="bar-row" style="gap:6px;">
+        <div class="bar-label" title="${a.agente} — ${a.zona}">${a.agente}</div>
+        <div class="bar-track">
+          <div class="bar-fill" style="width:${barW}%;background:${color};"></div>
+        </div>
+        <div class="bar-val" style="color:${color};font-size:10px;width:64px;">${sign}${fmt(a.delta)}</div>
+      </div>`;
+  }).join('');
+}
+
 // ── GRAFICO ───────────────────────────────────────────────────────────────────
 function buildChart() {
   const ctx = document.getElementById('trendChart').getContext('2d');
@@ -926,6 +970,7 @@ renderKPI();
 renderAgentTable();
 renderRank();
 buildChart();
+renderRankEuro();
 buildAgentSelect();
 renderAgentYear();
 </script>
