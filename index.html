@@ -1399,11 +1399,14 @@ function parseWorkbook(wb, filename) {
         break;
       }
     }
-    // Usa TOTALE VENDITE se disponibile, altrimenti somma agenti
-    if (totaleVendite26 != null) monthlyTotals[month].f26 = totaleVendite26;
+    // Usa TOTALE VENDITE se disponibile e > 0, altrimenti somma agenti
+    // f26=0 significa mese futuro senza dati reali → lascia null
+    if (totaleVendite26 != null && totaleVendite26 > 0) monthlyTotals[month].f26 = totaleVendite26;
     else if (monthTotal26 > 0) monthlyTotals[month].f26 = monthTotal26;
-    if (totaleVendite25 != null) monthlyTotals[month].f25 = totaleVendite25;
-    else if (monthTotal25 > 0) monthlyTotals[month].f25 = monthTotal25;
+    else monthlyTotals[month].f26 = null; // mese futuro, nessun dato
+    if (totaleVendite25 != null && totaleVendite25 > 0) monthlyTotals[month].f25 = totaleVendite25;
+    else if (monthTotal25 > 0) monthlyTotals[month].f25 = monthlyTotals[month].f25; // mantieni hardcoded
+    else if (totaleVendite25 != null) monthlyTotals[month].f25 = totaleVendite25;
 
     // Update agents for this month
     if (newAgents.length > 0) {
@@ -1432,7 +1435,7 @@ function parseWorkbook(wb, filename) {
   });
 
   // Determine last available month and set as current
-  const lastMonth = [...availableMonths].reverse().find(m => monthlyTotals[m].f26 != null);
+  const lastMonth = [...availableMonths].reverse().find(m => monthlyTotals[m].f26 != null && monthlyTotals[m].f26 > 0);
   if (lastMonth) {
     currentMonth = lastMonth;
     // Update nav
