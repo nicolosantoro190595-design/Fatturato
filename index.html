@@ -332,21 +332,22 @@ break;case"<bookViews":;case"<bookViews>":;case"</bookViews>":break;case"<workbo
 
   canvas { max-height: 240px; width: 100% !important; }
 
-  /* ── AGENT SELECT ── */
-  #agentSelect {
+  /* ── SELECTS ── */
+  #agentSelect, .month-select {
     font-family: 'DM Mono', monospace;
-    font-size: 11px;
+    font-size: 10px;
     background: var(--border);
     color: var(--text);
     border: 1px solid var(--border);
     border-radius: 4px;
-    padding: 4px 10px;
+    padding: 3px 8px;
     cursor: pointer;
     outline: none;
     -webkit-appearance: none;
     appearance: none;
+    letter-spacing: 0.5px;
   }
-  #agentSelect:focus { border-color: var(--accent); }
+  #agentSelect:focus, .month-select:focus { border-color: var(--accent); }
 
   /* ── AGENT YEAR MINI KPI ── */
   .agent-kpi {
@@ -505,7 +506,7 @@ break;case"<bookViews":;case"<bookViews>":;case"</bookViews>":break;case"<workbo
   <div class="card">
     <div class="card-header">
       <span class="card-title">Agenti — Mese</span>
-      <span class="card-badge" id="agentBadge">MAGGIO</span>
+      <select class="month-select" id="agentMonthSelect" onchange="selectAgentMonth(this.value)"></select>
     </div>
     <div class="card-body" style="padding:0">
       <div class="table-wrap">
@@ -546,7 +547,7 @@ break;case"<bookViews":;case"<bookViews>":;case"</bookViews>":break;case"<workbo
   <div class="card">
     <div class="card-header">
       <span class="card-title">Direzione</span>
-      <span class="card-badge" id="dirBadge">MAGGIO</span>
+      <select class="month-select" id="dirMonthSelect" onchange="selectDirMonth(this.value)"></select>
     </div>
     <div class="card-body">
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;" id="dirKpiRow"></div>
@@ -557,7 +558,7 @@ break;case"<bookViews":;case"<bookViews>":;case"</bookViews>":break;case"<workbo
   <div class="card">
     <div class="card-header">
       <span class="card-title">Spese di Trasporto</span>
-      <span class="card-badge" id="trBadge">MAGGIO</span>
+      <select class="month-select" id="trMonthSelect" onchange="selectTrMonth(this.value)"></select>
     </div>
     <div class="card-body">
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;" id="trKpiRow"></div>
@@ -776,7 +777,7 @@ function renderKPI() {
 
 // ── TABELLA AGENTI ────────────────────────────────────────────────────────────
 function renderAgentTable() {
-  const agents = agentsByMonth[currentMonth] || agentsMaggio;
+  const agents = agentsByMonth[agentMonth] || agentsByMonth[currentMonth] || agentsMaggio;
   const sorted = [...agents].sort((a,b) => (b.f26 ?? -Infinity) - (a.f26 ?? -Infinity));
 
   document.getElementById('agentBody').innerHTML = sorted.map(a => `
@@ -959,30 +960,39 @@ function renderKpiPair(elId, meseVal, meseDelta, ytdVal, ytdDelta) {
 }
 
 // ── DASHBOARD DIREZIONE ───────────────────────────────────────────────────────
-function renderDirezione() {
-  const m = currentMonth;
-  document.getElementById('dirBadge').textContent = m;
-  document.getElementById('trBadge').textContent  = m;
-
-  const mIdx = MONTHS.indexOf(m);
-  let dirYtd26=0, dirYtd25=0, trYtd26=0, trYtd25=0;
+function calcYtd(data, upToMonth) {
+  const mIdx = MONTHS.indexOf(upToMonth);
+  let ytd26=0, ytd25=0;
   for (let i=0; i<=mIdx; i++) {
     const mn = MONTHS[i];
-    if (direzioneData[mn].f26 != null) { dirYtd26 += direzioneData[mn].f26; dirYtd25 += direzioneData[mn].f25; }
-    if (trasportoData[mn].f26 != null) { trYtd26  += trasportoData[mn].f26;  trYtd25  += trasportoData[mn].f25; }
+    if (data[mn].f26 != null) { ytd26 += data[mn].f26; ytd25 += data[mn].f25; }
   }
+  return { ytd26, ytd25 };
+}
 
+function renderDirKpi() {
+  const m = dirMonth;
+  const { ytd26, ytd25 } = calcYtd(direzioneData, m);
   const dDir = direzioneData[m];
-  const dTr  = trasportoData[m];
-
   renderKpiPair('dirKpiRow',
     dDir.f26, dDir.f26 != null ? dDir.f26 - dDir.f25 : 0,
-    dirYtd26, dirYtd26 - dirYtd25
+    ytd26, ytd26 - ytd25
   );
+}
+
+function renderTrKpi() {
+  const m = trMonth;
+  const { ytd26, ytd25 } = calcYtd(trasportoData, m);
+  const dTr = trasportoData[m];
   renderKpiPair('trKpiRow',
     dTr.f26, dTr.f26 != null ? dTr.f26 - dTr.f25 : 0,
-    trYtd26, trYtd26 - trYtd25
+    ytd26, ytd26 - ytd25
   );
+}
+
+function renderDirezione() {
+  renderDirKpi();
+  renderTrKpi();
 
   const d26Dir = MONTHS.map(mn => direzioneData[mn].f26);
   const d25Dir = MONTHS.map(mn => direzioneData[mn].f25);
@@ -1233,6 +1243,43 @@ function renderAgentYear() {
 }
 
 
+// ── MESE INDIPENDENTE PER OGNI CARD ──────────────────────────────────────────
+let agentMonth = 'MAGGIO';
+let dirMonth   = 'MAGGIO';
+let trMonth    = 'MAGGIO';
+
+function buildMonthSelects() {
+  ['agentMonthSelect','dirMonthSelect','trMonthSelect'].forEach(id => {
+    const sel = document.getElementById(id);
+    if (!sel) return;
+    sel.innerHTML = '';
+    MONTHS.forEach(m => {
+      const opt = document.createElement('option');
+      opt.value = m;
+      opt.textContent = m.charAt(0) + m.slice(1).toLowerCase();
+      sel.appendChild(opt);
+    });
+  });
+  document.getElementById('agentMonthSelect').value = agentMonth;
+  document.getElementById('dirMonthSelect').value   = dirMonth;
+  document.getElementById('trMonthSelect').value    = trMonth;
+}
+
+function selectAgentMonth(m) {
+  agentMonth = m;
+  renderAgentTable();
+}
+
+function selectDirMonth(m) {
+  dirMonth = m;
+  renderDirKpi();
+}
+
+function selectTrMonth(m) {
+  trMonth = m;
+  renderTrKpi();
+}
+
 // ── UPLOAD EXCEL ─────────────────────────────────────────────────────────────
 
 // Drag & drop on upload zone
@@ -1395,6 +1442,7 @@ function parseNum(v) {
 }
 
 function refreshAll() {
+  buildMonthSelects();
   renderKPI();
   renderAgentTable();
 
@@ -1430,6 +1478,7 @@ function refreshAll() {
 
 // ── INIT ─────────────────────────────────────────────────────────────────────
 buildNav();
+buildMonthSelects();
 renderKPI();
 renderAgentTable();
 renderRank();
