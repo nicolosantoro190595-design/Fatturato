@@ -1,13 +1,13 @@
-const CACHE = 'fatturato-v1';
+const CACHE = 'fatturato-v2';
 const FILES = [
-  '/index.html',
-  '/manifest.json',
-  '/icon.png',
+  '/Fatturato/',
+  '/Fatturato/index.html',
+  '/Fatturato/manifest.json',
 ];
 
 self.addEventListener('install', e => {
   e.waitUntil(
-    caches.open(CACHE).then(c => c.addAll(FILES.filter(f => !f.endsWith('.png'))))
+    caches.open(CACHE).then(c => c.addAll(FILES))
   );
   self.skipWaiting();
 });
