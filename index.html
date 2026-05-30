@@ -603,21 +603,21 @@ const agentsMaggio = [
   { agente:'ROSSO',             zona:'CALABRIA',   f26:41747,  f25:36736,  bud:38573  },
   { agente:'FERRARA',           zona:'PIEMONTE',   f26:138580, f25:117163, bud:123021 },
   { agente:'BARONI',            zona:'LIGURIA',    f26:72848,  f25:74319,  bud:78035  },
-  { agente:'MERCURI-BERNUZZI',  zona:'LOMBARDIA',  f26:115047, f25:117729, bud:123616 },
-  { agente:'FIORA-PIGHETTI',    zona:'LOMBARDIA',  f26:66238,  f25:64191,  bud:67400  },
+  { agente:'MERCURI - BERNUZZI',  zona:'LOMBARDIA',  f26:115047, f25:117729, bud:123616 },
+  { agente:'FIORA - PIGHETTI',    zona:'LOMBARDIA',  f26:66238,  f25:64191,  bud:67400  },
   { agente:'INFOMED',           zona:'VENETO FVG', f26:148349, f25:154261, bud:161974 },
-  { agente:'MEDICAL TEAM',      zona:'EMILIA R.',  f26:275951, f25:252611, bud:265242 },
+  { agente:'MEDICAL TEAM TRADE',      zona:'EMILIA R.',  f26:275951, f25:252611, bud:265242 },
   { agente:'MARCHESINI',        zona:'EMILIA R.',  f26:90004,  f25:88886,  bud:93331  },
   { agente:'TOSCANA NORD',      zona:'TOSCANA',    f26:28430,  f25:34822,  bud:36563  },
   { agente:'TOSCANA SUD',       zona:'TOSCANA',    f26:20297,  f25:20566,  bud:21594  },
   { agente:'SOLUSTRI',          zona:'MARCHE',     f26:20373,  f25:16937,  bud:17784  },
-  { agente:'ZECCHINI-POMPEI',   zona:'ABRUZZO',    f26:5625,   f25:24228,  bud:25439  },
-  { agente:'LOIUDICE-SPAD.',    zona:'PUGLIA',     f26:44623,  f25:43738,  bud:45925  },
+  { agente:'ZECCHINI - POMPEI',   zona:'ABRUZZO',    f26:5625,   f25:24228,  bud:25439  },
+  { agente:'LOIUDICE - SPADAVECCHIA',    zona:'PUGLIA',     f26:44623,  f25:43738,  bud:45925  },
   { agente:'LOIUDICE',          zona:'PUGLIA',     f26:26028,  f25:19900,  bud:20895  },
   { agente:'SCOTTONI',          zona:'LAZIO',      f26:168829, f25:145132, bud:152389 },
   { agente:'SALVATI',           zona:'CAMPANIA',   f26:169405, f25:162264, bud:170377 },
   { agente:'BENNICI',           zona:'SICILIA',    f26:26893,  f25:21723,  bud:22809  },
-  { agente:'PESCE-ALBANO',      zona:'SICILIA',    f26:72674,  f25:95647,  bud:100430 },
+  { agente:'PESCE - ALBANO',      zona:'SICILIA',    f26:72674,  f25:95647,  bud:100430 },
   { agente:'ALECCI',            zona:'SICILIA',    f26:18438,  f25:23573,  bud:24751  },
   { agente:'ATZENI',            zona:'SARDEGNA',   f26:23352,  f25:17337,  bud:18204  },
   { agente:'MANFREDI',          zona:'UMBRIA',     f26:17830,  f25:16508,  bud:17333  },
@@ -636,12 +636,12 @@ const agentsByMonth = { MAGGIO: agentsMaggio };
 
 const generalAgents = [
   { agente:'SALVATI',        zona:'CAMPANIA',   ytd:996881  },
-  { agente:'MEDICAL TEAM',   zona:'EMILIA R.',  ytd:932220  },
+  { agente:'MEDICAL TEAM TRADE',   zona:'EMILIA R.',  ytd:932220  },
   { agente:'INFOMED',        zona:'VENETO FVG', ytd:782762  },
   { agente:'FERRARA',        zona:'PIEMONTE',   ytd:535127  },
-  { agente:'MERCURI-BERN.',  zona:'LOMBARDIA',  ytd:520934  },
+  { agente:'MERCURI - BERNUZZI',  zona:'LOMBARDIA',  ytd:520934  },
   { agente:'SCOTTONI',       zona:'LAZIO',      ytd:542623  },
-  { agente:'FIORA-PIGH.',    zona:'LOMBARDIA',  ytd:343023  },
+  { agente:'FIORA - PIGHETTI',    zona:'LOMBARDIA',  ytd:343023  },
   { agente:'BARONI',         zona:'LIGURIA',    ytd:308496  },
 ];
 
@@ -1121,7 +1121,7 @@ function buildAgentSelect() {
     const opt = document.createElement('option');
     opt.value = a.agente;
     opt.textContent = a.agente;
-    if (a.agente === 'MEDICAL TEAM') opt.selected = true;
+    if (a.agente === 'MEDICAL TEAM TRADE') opt.selected = true;
     sel.appendChild(opt);
   });
 }
@@ -1387,9 +1387,23 @@ function parseWorkbook(wb, filename) {
       }
     }
 
-    // Update monthly totals
-    if (monthTotal26 > 0) monthlyTotals[month].f26 = monthTotal26;
-    if (monthTotal25 > 0) monthlyTotals[month].f25 = monthTotal25;
+    // Cerca TOTALE VENDITE direttamente — è il dato corretto
+    let totaleVendite26 = null, totaleVendite25 = null;
+    for (let r = headerRow + 1; r < rows.length; r++) {
+      const row = rows[r];
+      if (!row) continue;
+      const zona = row[colMap.zona] != null ? String(row[colMap.zona]).trim().toUpperCase() : '';
+      if (zona === 'TOTALE VENDITE') {
+        totaleVendite26 = parseNum(row[colMap.f26]);
+        totaleVendite25 = parseNum(row[colMap.f25]);
+        break;
+      }
+    }
+    // Usa TOTALE VENDITE se disponibile, altrimenti somma agenti
+    if (totaleVendite26 != null) monthlyTotals[month].f26 = totaleVendite26;
+    else if (monthTotal26 > 0) monthlyTotals[month].f26 = monthTotal26;
+    if (totaleVendite25 != null) monthlyTotals[month].f25 = totaleVendite25;
+    else if (monthTotal25 > 0) monthlyTotals[month].f25 = monthTotal25;
 
     // Update agents for this month
     if (newAgents.length > 0) {
@@ -1455,7 +1469,7 @@ function refreshAll() {
     agents.forEach(a => {
       const opt = document.createElement('option');
       opt.value = a; opt.textContent = a;
-      if (a === current || a === 'MEDICAL TEAM') opt.selected = true;
+      if (a === current || a === 'MEDICAL TEAM TRADE') opt.selected = true;
       sel.appendChild(opt);
     });
   }
