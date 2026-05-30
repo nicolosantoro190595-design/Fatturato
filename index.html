@@ -359,6 +359,12 @@
     .bar-label { width: 70px; font-size: 9px; }
     .bar-val   { width: 44px; font-size: 9px; }
     #agentKpiRow { grid-template-columns: 1fr !important; gap: 8px; }
+    #dirKpiRow { grid-template-columns: 1fr 1fr !important; gap: 8px; }
+    .rank-side-grid { grid-template-columns: 1fr !important; }
+  }
+
+  @media (max-width: 480px) {
+    #dirKpiRow { grid-template-columns: 1fr !important; }
   }
 
   @media (max-width: 380px) {
@@ -419,23 +425,44 @@
     </div>
   </div>
 
-  <div class="card">
+  <div class="card full">
     <div class="card-header">
-      <span class="card-title">Ranking — Delta % YTD</span>
+      <span class="card-title">Ranking Agenti YTD</span>
       <span class="card-badge">2026 vs 2025</span>
     </div>
-    <div class="card-body">
-      <div class="rank-wrap" id="rankWrap"></div>
+    <div class="card-body" style="padding:0;">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:0;border-top:none;">
+        <div style="padding:20px;border-right:1px solid var(--border);">
+          <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:14px;">Delta % — crescita relativa</div>
+          <div class="rank-wrap" id="rankWrap"></div>
+        </div>
+        <div style="padding:20px;">
+          <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:14px;">Delta € — crescita assoluta</div>
+          <div class="rank-wrap" id="rankWrapEuro"></div>
+        </div>
+      </div>
     </div>
   </div>
 
   <div class="card">
     <div class="card-header">
-      <span class="card-title">Ranking — Delta € YTD</span>
-      <span class="card-badge">2026 vs 2025</span>
+      <span class="card-title">Direzione</span>
+      <span class="card-badge" id="dirBadge">MAGGIO</span>
     </div>
     <div class="card-body">
-      <div class="rank-wrap" id="rankWrapEuro"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;" id="dirKpiRow"></div>
+      <canvas id="dirChart" style="max-height:200px;"></canvas>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <span class="card-title">Spese di Trasporto</span>
+      <span class="card-badge" id="trBadge">MAGGIO</span>
+    </div>
+    <div class="card-body">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;" id="trKpiRow"></div>
+      <canvas id="trChart" style="max-height:200px;"></canvas>
     </div>
   </div>
 
@@ -585,6 +612,7 @@ function selectMonth(m) {
   document.getElementById('agentBadge').textContent = m;
   // aggiorna highlight barra mese corrente
   if (trendChart) trendChart.update();
+  renderDirezione();
 }
 
 // ── KPI ──────────────────────────────────────────────────────────────────────
@@ -735,6 +763,147 @@ function renderRankEuro() {
         <div class="bar-val" style="color:${color};font-size:10px;width:64px;">${sign}${fmt(a.delta)}</div>
       </div>`;
   }).join('');
+}
+
+
+// ── DATI DIREZIONE ────────────────────────────────────────────────────────────
+const direzioneData = {
+  GENNAIO:   { f26: 8424.70,  f25: 2425.53  },
+  FEBBRAIO:  { f26: 2014.84,  f25: 6085.45  },
+  MARZO:     { f26: 17387.50, f25: 3942.97  },
+  APRILE:    { f26: 1846.52,  f25: 0        },
+  MAGGIO:    { f26: 14316.22, f25: 21154.17 },
+  GIUGNO:    { f26: null,     f25: 0        },
+  LUGLIO:    { f26: null,     f25: 0        },
+  AGOSTO:    { f26: null,     f25: 0        },
+  SETTEMBRE: { f26: null,     f25: 0        },
+  OTTOBRE:   { f26: null,     f25: 0        },
+  NOVEMBRE:  { f26: null,     f25: 0        },
+  DICEMBRE:  { f26: null,     f25: 0        },
+};
+
+const trasportoData = {
+  GENNAIO:   { f26: 11997.10, f25: 13342.00 },
+  FEBBRAIO:  { f26: 13886.75, f25: 12997.41 },
+  MARZO:     { f26: 15065.39, f25: 14759.10 },
+  APRILE:    { f26: 15230.70, f25: 13860.06 },
+  MAGGIO:    { f26: 14241.20, f25: 13780.80 },
+  GIUGNO:    { f26: null,     f25: 0        },
+  LUGLIO:    { f26: null,     f25: 0        },
+  AGOSTO:    { f26: null,     f25: 0        },
+  SETTEMBRE: { f26: null,     f25: 0        },
+  OTTOBRE:   { f26: null,     f25: 0        },
+  NOVEMBRE:  { f26: null,     f25: 0        },
+  DICEMBRE:  { f26: null,     f25: 0        },
+};
+
+const extraData = {
+  GENNAIO:   { f26: 20421.80, f25: 15767.53 },
+  FEBBRAIO:  { f26: 15901.59, f25: 19082.86 },
+  MARZO:     { f26: 32452.89, f25: 18702.07 },
+  APRILE:    { f26: 17077.22, f25: 13860.06 },
+  MAGGIO:    { f26: 28557.42, f25: 34934.97 },
+  GIUGNO:    { f26: null,     f25: 0        },
+  LUGLIO:    { f26: null,     f25: 0        },
+  AGOSTO:    { f26: null,     f25: 0        },
+  SETTEMBRE: { f26: null,     f25: 0        },
+  OTTOBRE:   { f26: null,     f25: 0        },
+  NOVEMBRE:  { f26: null,     f25: 0        },
+  DICEMBRE:  { f26: null,     f25: 0        },
+};
+
+let dirChart, trChart;
+
+function makeSimpleChart(canvasId, data26, data25, color26, color25) {
+  const ctx = document.getElementById(canvasId).getContext('2d');
+  return new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: MONTHS.map(m => m.slice(0,3)),
+      datasets: [
+        { label:'2026', data:data26, backgroundColor:color26, borderRadius:3, order:1 },
+        { label:'2025', data:data25, backgroundColor:color25, borderRadius:3, order:2 },
+      ]
+    },
+    options: {
+      responsive:true, maintainAspectRatio:true,
+      interaction:{ mode:'index', intersect:false },
+      plugins: {
+        legend:{ display:true, labels:{ color:'#6b6b88', font:{ family:'DM Mono', size:10 }, boxWidth:10, padding:14 } },
+        tooltip:{
+          backgroundColor:'#16161f', borderColor:'#1e1e2e', borderWidth:1,
+          titleColor:'#6b6b88', bodyColor:'#e8e8f0',
+          titleFont:{ family:'DM Mono', size:11 }, bodyFont:{ family:'DM Mono', size:11 }, padding:10,
+          callbacks:{ label: ctx => ctx.raw == null ? ` ${ctx.dataset.label}: n/d` : ` ${ctx.dataset.label}: ${fmtFull(ctx.raw)}` }
+        }
+      },
+      scales: {
+        x:{ grid:{color:'rgba(30,30,46,0.6)'}, ticks:{color:'#6b6b88',font:{family:'DM Mono',size:10}} },
+        y:{ grid:{color:'rgba(30,30,46,0.6)'}, ticks:{color:'#6b6b88',font:{family:'DM Mono',size:10},callback:v=>'€'+(v/1000).toFixed(0)+'k'} }
+      }
+    }
+  });
+}
+
+function renderKpiPair(elId, meseVal, meseDelta, ytdVal, ytdDelta) {
+  document.getElementById(elId).innerHTML = `
+    <div class="agent-kpi">
+      <div class="agent-kpi-label">Mese</div>
+      <div class="agent-kpi-value" style="font-size:16px;">${fmtFull(meseVal ?? 0)}</div>
+      <div class="agent-kpi-delta ${meseDelta>=0?'pos':'neg'}">${fmtDelta(meseDelta)} vs 2025</div>
+    </div>
+    <div class="agent-kpi">
+      <div class="agent-kpi-label">YTD</div>
+      <div class="agent-kpi-value" style="font-size:16px;">${fmtFull(ytdVal)}</div>
+      <div class="agent-kpi-delta ${ytdDelta>=0?'pos':'neg'}">${fmtDelta(ytdDelta)} vs 2025</div>
+    </div>`;
+}
+
+// ── DASHBOARD DIREZIONE ───────────────────────────────────────────────────────
+function renderDirezione() {
+  const m = currentMonth;
+  document.getElementById('dirBadge').textContent = m;
+  document.getElementById('trBadge').textContent  = m;
+
+  const mIdx = MONTHS.indexOf(m);
+  let dirYtd26=0, dirYtd25=0, trYtd26=0, trYtd25=0;
+  for (let i=0; i<=mIdx; i++) {
+    const mn = MONTHS[i];
+    if (direzioneData[mn].f26 != null) { dirYtd26 += direzioneData[mn].f26; dirYtd25 += direzioneData[mn].f25; }
+    if (trasportoData[mn].f26 != null) { trYtd26  += trasportoData[mn].f26;  trYtd25  += trasportoData[mn].f25; }
+  }
+
+  const dDir = direzioneData[m];
+  const dTr  = trasportoData[m];
+
+  renderKpiPair('dirKpiRow',
+    dDir.f26, dDir.f26 != null ? dDir.f26 - dDir.f25 : 0,
+    dirYtd26, dirYtd26 - dirYtd25
+  );
+  renderKpiPair('trKpiRow',
+    dTr.f26, dTr.f26 != null ? dTr.f26 - dTr.f25 : 0,
+    trYtd26, trYtd26 - trYtd25
+  );
+
+  const d26Dir = MONTHS.map(mn => direzioneData[mn].f26);
+  const d25Dir = MONTHS.map(mn => direzioneData[mn].f25);
+  const d26Tr  = MONTHS.map(mn => trasportoData[mn].f26);
+  const d25Tr  = MONTHS.map(mn => trasportoData[mn].f25);
+
+  if (dirChart) {
+    dirChart.data.datasets[0].data = d26Dir;
+    dirChart.data.datasets[1].data = d25Dir;
+    dirChart.update();
+    trChart.data.datasets[0].data = d26Tr;
+    trChart.data.datasets[1].data = d25Tr;
+    trChart.update();
+    return;
+  }
+
+  dirChart = makeSimpleChart('dirChart', d26Dir, d25Dir,
+    'rgba(124,111,247,0.85)', 'rgba(124,111,247,0.2)');
+  trChart  = makeSimpleChart('trChart',  d26Tr,  d25Tr,
+    'rgba(255,214,10,0.8)',   'rgba(255,214,10,0.2)');
 }
 
 // ── GRAFICO ───────────────────────────────────────────────────────────────────
@@ -971,6 +1140,7 @@ renderAgentTable();
 renderRank();
 buildChart();
 renderRankEuro();
+renderDirezione();
 buildAgentSelect();
 renderAgentYear();
 </script>
