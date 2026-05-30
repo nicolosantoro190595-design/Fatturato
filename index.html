@@ -52,12 +52,15 @@ break;case"<bookViews":;case"<bookViews>":;case"</bookViews>":break;case"<workbo
     --text: #e8e8f0;
     --muted: #6b6b88;
     --card: #16161f;
+    --card-alt: #13131a;
+    --header-bg: #0a0a0f;
+    --header-text: #e8e8f0;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
   body {
-    background: var(--bg);
+    background: var(--border);
     color: var(--text);
     font-family: 'Syne', sans-serif;
     min-height: 100vh;
@@ -90,6 +93,7 @@ break;case"<bookViews":;case"<bookViews>":;case"</bookViews>":break;case"<workbo
     font-weight: 800;
     letter-spacing: -0.5px;
     line-height: 1.1;
+    color: #ffffff;
   }
   .brand-title span { color: var(--accent); }
 
@@ -140,6 +144,7 @@ break;case"<bookViews":;case"<bookViews>":;case"</bookViews>":break;case"<workbo
     padding: 20px 24px;
     position: relative;
     overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
   }
   .kpi::before {
     content: '';
@@ -148,9 +153,9 @@ break;case"<bookViews":;case"<bookViews>":;case"</bookViews>":break;case"<workbo
     height: 2px;
   }
   .kpi:nth-child(1)::before { background: var(--accent); }
-  .kpi:nth-child(2)::before { background: var(--accent3); }
-  .kpi:nth-child(3)::before { background: var(--accent2); }
-  .kpi:nth-child(4)::before { background: var(--accent4); }
+  .kpi:nth-child(2)::before { background: var(--accent2); }
+  .kpi:nth-child(3)::before { background: var(--accent4); }
+  .kpi:nth-child(4)::before { background: var(--accent3); }
 
   .kpi-label {
     font-family: 'DM Mono', monospace;
@@ -210,7 +215,8 @@ break;case"<bookViews":;case"<bookViews>":;case"</bookViews>":break;case"<workbo
     border: 1px solid var(--border);
     border-radius: 8px;
     overflow: hidden;
-    min-width: 0; /* fix overflow in grid */
+    min-width: 0;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.07);
   }
   .card.full { grid-column: 1 / -1; }
 
@@ -351,7 +357,7 @@ break;case"<bookViews":;case"<bookViews>":;case"</bookViews>":break;case"<workbo
 
   /* ── AGENT YEAR MINI KPI ── */
   .agent-kpi {
-    background: var(--bg);
+    background: var(--border);
     border: 1px solid var(--border);
     border-radius: 6px;
     padding: 12px 16px;
@@ -399,7 +405,7 @@ break;case"<bookViews":;case"<bookViews>":;case"</bookViews>":break;case"<workbo
 
   /* ── UPLOAD ZONE ── */
   .upload-banner {
-    background: var(--card);
+    background: var(--border);
     border-bottom: 1px solid var(--border);
     padding: 10px 16px;
     display: flex;
@@ -459,6 +465,31 @@ break;case"<bookViews":;case"<bookViews>":;case"</bookViews>":break;case"<workbo
     .upload-icon { font-size: 15px; }
     .upload-text { font-size: 10px; }
   }
+
+  /* ── DESIGN POLISH ── */
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    color: var(--muted);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 20px 32px 0;
+  }
+  @media (max-width: 700px) { .section-label { padding: 12px 12px 0; } }
+
+  /* hover card */
+  .card { transition: border-color 0.2s; }
+  .card:hover { border-color: rgba(255,255,255,0.08); }
+
+  /* KPI tabular */
+  .kpi-value { font-variant-numeric: tabular-nums; }
+
+  /* Righe alternate tabella */
+  .agent-table tbody tr:nth-child(even) td { background: rgba(255,255,255,0.012); }
+
+  /* Barre ranking più alte */
+  .bar-track { height: 6px; }
+
 </style>
 </head>
 <body>
@@ -503,6 +534,8 @@ break;case"<bookViews":;case"<bookViews>":;case"</bookViews>":break;case"<workbo
     </div>
   </div>
 
+  <div class="section-label">Dettaglio agenti</div>
+
   <div class="card">
     <div class="card-header">
       <span class="card-title">Agenti — Mese</span>
@@ -544,6 +577,8 @@ break;case"<bookViews":;case"<bookViews>":;case"</bookViews>":break;case"<workbo
     </div>
   </div>
 
+  <div class="section-label">Vendite extra rete</div>
+
   <div class="card">
     <div class="card-header">
       <span class="card-title">Direzione</span>
@@ -565,6 +600,8 @@ break;case"<bookViews":;case"<bookViews>":;case"</bookViews>":break;case"<workbo
       <canvas id="trChart" style="max-height:200px;"></canvas>
     </div>
   </div>
+
+  <div class="section-label">Analisi per agente</div>
 
   <div class="card full">
     <div class="card-header">
@@ -791,9 +828,19 @@ MONTHS.forEach(m => {
 });
 
 // ── UTILS ────────────────────────────────────────────────────────────────────
-const fmt     = v => v == null ? '—' : '€' + (v/1000).toFixed(0) + 'k';
+const itFmt = new Intl.NumberFormat('it-IT', { maximumFractionDigits: 0 });
+// fmt: usato nei KPI grandi e nelle barre — mostra €1.623k
+const fmt = v => {
+  if (v == null) return '—';
+  const abs = Math.abs(v);
+  if (abs >= 1000000) return (v < 0 ? '-' : '') + '€' + itFmt.format(Math.round(abs/1000)) + 'k';
+  if (abs >= 1000)    return (v < 0 ? '-' : '') + '€' + itFmt.format(Math.round(abs/1000)) + 'k';
+  return (v < 0 ? '-' : '') + '€' + itFmt.format(Math.round(abs));
+};
+// fmtFull: numero intero con punto migliaia — €275.951
 const fmtFull = v => (v == null || isNaN(v)) ? '—'
   : new Intl.NumberFormat('it-IT',{style:'currency',currency:'EUR',maximumFractionDigits:0}).format(v);
+// fmtDelta: con segno + e punto migliaia — +€31.506
 const fmtDelta = v => (v == null || isNaN(v)) ? '—'
   : (v >= 0 ? '+' : '') + new Intl.NumberFormat('it-IT',{style:'currency',currency:'EUR',maximumFractionDigits:0}).format(v);
 const pct = (a,b) => (b && b !== 0) ? ((a-b)/b*100).toFixed(1)+'%' : '—';
@@ -850,25 +897,28 @@ function renderKPI() {
 
   const meseName = currentMonth.charAt(0) + currentMonth.slice(1).toLowerCase();
 
+  // Budget YTD reale dal GENERALE (totale compressione gen-mag)
+  const budgetYtd = 6344181.55;
+
   const kpis = [
     {
       label: 'Fatturato ' + meseName,
-      value: hasDati ? fmt(d.f26) : 'n/d',
-      sub:   hasDati ? 'vs ' + fmt(d.f25) + ' nel 2025' : 'dati non disponibili',
+      value: hasDati ? fmtFull(d.f26) : 'n/d',
+      sub:   hasDati ? 'vs ' + fmtFull(d.f25) + ' nel 2025' : 'dati non disponibili',
       delta: hasDati ? fmtDelta(deltaM) : '—',
       pos:   positiveM,
     },
     {
       label: 'Crescita mese',
       value: hasDati ? pct(d.f26, d.f25) : 'n/d',
-      sub:   hasDati ? 'rispetto a ' + meseName + ' 2025' : 'dati non disponibili',
-      delta: hasDati ? fmtFull(d.f26) + ' totale' : '—',
+      sub:   hasDati ? 'su un totale di ' + fmtFull(d.f26) : 'dati non disponibili',
+      delta: hasDati ? fmtDelta(deltaM) + ' vs 2025' : '—',
       pos:   positiveM,
     },
     {
       label: 'YTD gen–' + meseName.slice(0,3),
-      value: fmt(ytd26),
-      sub:   'vs ' + fmt(ytd25) + ' stesso periodo 2025',
+      value: fmtFull(ytd26),
+      sub:   'vs ' + fmtFull(ytd25) + ' stesso periodo 2025',
       delta: fmtDelta(deltaYTD),
       pos:   deltaYTD >= 0,
     },
@@ -876,7 +926,7 @@ function renderKPI() {
       label: 'Crescita YTD',
       value: pct(ytd26, ytd25),
       sub:   'cumulato da gennaio a ' + meseName.toLowerCase(),
-      delta: 'budget: €6,34M',
+      delta: 'budget: ' + fmtFull(budgetYtd),
       pos:   deltaYTD >= 0,
     },
   ];
