@@ -2,7 +2,7 @@
 <html lang="it">
 <head>
 <meta charset="UTF-8">
-<meta name="theme-color" content="#0a0a0f">
+<meta name="theme-color" content="#ffffff">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -43,18 +43,20 @@ break;case"<bookViews":;case"<bookViews>":;case"</bookViews>":break;case"<workbo
   @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700;800&display=swap');
 
   :root {
-    --bg: #0a0a0f;
-    --border: #1e1e2e;
-    --accent: #00e5a0;
-    --accent2: #ff4d6d;
-    --accent3: #ffd60a;
-    --accent4: #7c6ff7;
-    --text: #e8e8f0;
-    --muted: #6b6b88;
-    --card: #16161f;
-    --card-alt: #13131a;
-    --header-bg: #0a0a0f;
-    --header-text: #e8e8f0;
+    --bg: #f4f4f6;
+    --border: #e3e3ea;
+    --accent: #E6007E;
+    --accent2: #d0021b;
+    --accent3: #3c3c3b;
+    --accent4: #98005e;
+    --text: #2b2b2e;
+    --muted: #73737f;
+    --card: #ffffff;
+    --card-alt: #fafafb;
+    --header-bg: #ffffff;
+    --header-text: #2b2b2e;
+    --pos: #00915f;
+    --neg: #d0021b;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -76,7 +78,7 @@ break;case"<bookViews":;case"<bookViews>":;case"</bookViews>":break;case"<workbo
     justify-content: space-between;
     align-items: center;
     gap: 16px;
-    background: linear-gradient(180deg, #0f0f18 0%, transparent 100%);
+    background: var(--header-bg); border-bottom: 1px solid var(--border);
     flex-wrap: wrap;
   }
 
@@ -93,7 +95,7 @@ break;case"<bookViews":;case"<bookViews>":;case"</bookViews>":break;case"<workbo
     font-weight: 800;
     letter-spacing: -0.5px;
     line-height: 1.1;
-    color: #ffffff;
+    color: var(--text);
   }
   .brand-title span { color: var(--accent); }
 
@@ -128,7 +130,7 @@ break;case"<bookViews":;case"<bookViews>":;case"</bookViews>":break;case"<workbo
     -webkit-tap-highlight-color: transparent;
   }
   .month-btn:hover  { border-color: var(--accent); color: var(--accent); }
-  .month-btn.active { background: var(--accent); color: var(--bg); border-color: var(--accent); font-weight: 600; }
+  .month-btn.active { background: var(--accent); color: #ffffff; border-color: var(--accent); font-weight: 600; }
 
   /* ── KPI STRIP ── */
   .kpi-strip {
@@ -199,8 +201,8 @@ break;case"<bookViews":;case"<bookViews>":;case"</bookViews>":break;case"<workbo
     text-overflow: ellipsis;
     white-space: nowrap;
   }
-  .kpi-delta.pos { background: rgba(0,229,160,0.12); color: var(--accent); }
-  .kpi-delta.neg { background: rgba(255,77,109,0.12); color: var(--accent2); }
+  .kpi-delta.pos { background: rgba(0,145,95,0.10); color: var(--pos); }
+  .kpi-delta.neg { background: rgba(208,2,27,0.08); color: var(--neg); }
 
   /* ── MAIN GRID ── */
   .main {
@@ -278,7 +280,7 @@ break;case"<bookViews":;case"<bookViews>":;case"</bookViews>":break;case"<workbo
     border-bottom: 1px solid rgba(30,30,46,0.5);
     white-space: nowrap;
   }
-  .agent-table tr:hover td { background: rgba(255,255,255,0.02); }
+  .agent-table tr:hover td { background: rgba(230,0,126,0.03); }
   .agent-name { font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 600; display: block; }
   .zone-tag   { font-family: 'DM Mono', monospace; font-size: 9px; color: var(--muted); display: block; margin-top: 1px; letter-spacing: 0.5px; }
 
@@ -288,9 +290,9 @@ break;case"<bookViews":;case"<bookViews>":;case"</bookViews>":break;case"<workbo
     padding: 2px 6px; border-radius: 3px;
     white-space: nowrap;
   }
-  .delta-pill.pos { background: rgba(0,229,160,0.12); color: var(--accent); }
-  .delta-pill.neg { background: rgba(255,77,109,0.12); color: var(--accent2); }
-  .delta-pill.nd  { background: rgba(107,107,136,0.12); color: var(--muted); }
+  .delta-pill.pos { background: rgba(0,145,95,0.10); color: var(--pos); }
+  .delta-pill.neg { background: rgba(208,2,27,0.08); color: var(--neg); }
+  .delta-pill.nd  { background: rgba(115,115,127,0.12); color: var(--muted); }
 
   /* ── RANK BARS ── */
   .rank-wrap { display: flex; flex-direction: column; gap: 10px; }
@@ -334,7 +336,7 @@ break;case"<bookViews":;case"<bookViews>":;case"</bookViews>":break;case"<workbo
     -webkit-tap-highlight-color: transparent;
   }
   .filter-btn:hover  { border-color: var(--muted); color: var(--text); }
-  .filter-btn.active { border-color: var(--accent); color: var(--accent); background: rgba(0,229,160,0.08); }
+  .filter-btn.active { border-color: var(--accent); color: var(--accent); background: rgba(230,0,126,0.08); }
 
   canvas { max-height: 240px; width: 100% !important; }
 
@@ -344,7 +346,7 @@ break;case"<bookViews":;case"<bookViews>":;case"</bookViews>":break;case"<workbo
     font-size: 10px;
     background: var(--border);
     color: var(--text);
-    border: 1px solid rgba(255,255,255,0.15);
+    border: 1px solid var(--border);
     border-radius: 4px;
     padding: 4px 24px 4px 10px;
     cursor: pointer;
@@ -358,7 +360,7 @@ break;case"<bookViews":;case"<bookViews>":;case"</bookViews>":break;case"<workbo
     min-width: 80px;
   }
   #agentSelect:focus, .month-select:focus { border-color: var(--accent); outline: none; }
-  #agentSelect:hover, .month-select:hover { border-color: rgba(255,255,255,0.3); }
+  #agentSelect:hover, .month-select:hover { border-color: var(--muted); }
 
   /* ── AGENT YEAR MINI KPI ── */
   .agent-kpi {
@@ -370,8 +372,8 @@ break;case"<bookViews":;case"<bookViews>":;case"</bookViews>":break;case"<workbo
   .agent-kpi-label { font-family: 'DM Mono', monospace; font-size: 9px; color: var(--muted); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 4px; }
   .agent-kpi-value { font-size: 18px; font-weight: 800; letter-spacing: -0.5px; }
   .agent-kpi-delta { font-family: 'DM Mono', monospace; font-size: 10px; margin-top: 4px; }
-  .agent-kpi-delta.pos { color: var(--accent); }
-  .agent-kpi-delta.neg { color: var(--accent2); }
+  .agent-kpi-delta.pos { color: var(--pos); }
+  .agent-kpi-delta.neg { color: var(--neg); }
 
   /* ── RESPONSIVE ── */
   @media (max-width: 700px) {
@@ -431,7 +433,7 @@ break;case"<bookViews":;case"<bookViews>":;case"</bookViews>":break;case"<workbo
     flex-shrink: 0;
     white-space: nowrap;
   }
-  .upload-zone:hover, .upload-zone.drag { border-color: var(--accent); background: rgba(0,229,160,0.05); }
+  .upload-zone:hover, .upload-zone.drag { border-color: var(--accent); background: rgba(230,0,126,0.05); }
   .upload-zone input { display: none; }
   .upload-icon { font-size: 16px; flex-shrink: 0; }
   .upload-text { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted); white-space: nowrap; }
@@ -458,8 +460,8 @@ break;case"<bookViews":;case"<bookViews>":;case"</bookViews>":break;case"<workbo
     overflow: hidden;
     text-overflow: ellipsis;
   }
-  .upload-status.ok .dot { background: var(--accent); }
-  .upload-status.ok { color: var(--accent); }
+  .upload-status.ok .dot { background: var(--pos); }
+  .upload-status.ok { color: var(--pos); }
   .upload-status.err .dot { background: var(--accent2); }
   .upload-status.err { color: var(--accent2); }
 
@@ -484,13 +486,13 @@ break;case"<bookViews":;case"<bookViews>":;case"</bookViews>":break;case"<workbo
 
   /* hover card */
   .card { transition: border-color 0.2s; }
-  .card:hover { border-color: rgba(255,255,255,0.08); }
+  .card:hover { border-color: #d5d5de; }
 
   /* KPI tabular */
   .kpi-value { font-variant-numeric: tabular-nums; }
 
   /* Righe alternate tabella */
-  .agent-table tbody tr:nth-child(even) td { background: rgba(255,255,255,0.012); }
+  .agent-table tbody tr:nth-child(even) td { background: rgba(0,0,0,0.015); }
 
   /* Barre ranking più alte */
   .bar-track { height: 6px; }
@@ -500,9 +502,37 @@ break;case"<bookViews":;case"<bookViews>":;case"</bookViews>":break;case"<workbo
 <body>
 
 <header>
-  <div class="brand">
+  <div class="brand" style="display:flex;align-items:center;gap:14px;">
+    <svg style="width:46px;height:46px;border-radius:6px;display:block;" version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 283.465 283.465">
+	<g id="medi-logo">
+		<polygon fill="#E6007E" points="141.732,0 283.465,0 283.465,283.465 0,283.465 0,0"/>
+		<g>
+			<path fill="#FFFFFF" d="M36.142,165.102h14.181v4.33c2.923-2.273,7.686-5.195,15.264-5.195c5.628,0,10.176,2.381,12.666,6.061
+				c4.221-3.355,9.09-6.061,15.91-6.061c12.449,0,17.537,7.9,17.537,18.727v35.287H97.303v-33.123c0-6.062-1.84-9.525-8.011-9.525
+				c-3.032,0-6.495,1.623-8.66,2.924c0.218,1.082,0.542,3.137,0.542,5.193v34.531H66.668v-33.342c0-6.707-2.705-9.307-7.686-9.307
+				c-2.922,0-6.062,1.73-8.335,3.355v39.293H36.142V165.102z"/>
+			<path fill="#FFFFFF" d="M119.492,191.73c0-15.045,8.66-27.494,25.221-27.494c17.105,0,22.625,11.904,22.625,24.678
+				c0,1.301-0.108,3.465-0.325,4.98h-32.69c0.215,8.768,3.463,14.395,13.746,14.395c6.388,0,11.908-1.514,15.696-3.246v11.041
+				c-4.33,1.732-10.284,3.033-16.778,3.033C127.61,219.117,119.492,207.857,119.492,191.73z M153.156,185.451v-0.543
+				c0-5.086-2.705-10.064-8.443-10.064c-5.627,0-9.308,3.789-9.958,10.607H153.156z"/>
+			<path fill="#FFFFFF" d="M172.924,192.27c0-15.584,9.42-28.033,24.572-28.033c5.305,0,8.229,1.189,9.635,1.84v-21.432h14.396
+				v73.605h-14.396v-4.115c-2.382,2.6-6.604,4.982-12.665,4.982C179.745,219.117,172.924,208.184,172.924,192.27z M207.131,204.828
+				v-28.143c-1.518-0.758-3.897-1.518-6.712-1.518c-8.336,0-12.23,6.387-12.23,16.453c0,8.984,2.704,16.129,11.039,16.129
+				C202.368,207.75,205.291,206.668,207.131,204.828z"/>
+			<path fill="#FFFFFF" d="M231.299,149.514c0-4.547,3.682-8.336,8.769-8.336c4.98,0,8.662,3.789,8.662,8.336
+				s-3.682,8.443-8.662,8.443C234.98,157.957,231.299,154.061,231.299,149.514z M232.706,165.102h7.308h7.309v53.148h-14.616
+				V165.102z"/>
+		</g>
+		<g>
+			<polygon fill="#FFFFFF" points="247.323,245.197 121.182,245.197 121.182,238.819 121.182,232.441 247.323,232.441"/>
+			<polygon fill="#FFFFFF" points="111.699,245.197 36.142,245.197 36.142,238.819 36.142,232.441 111.699,232.441"/>
+		</g>
+	</g>
+</svg>
+    <div>
     <div class="brand-label">Report Commerciale</div>
     <div class="brand-title">Fatturato <span>2026</span></div>
+    </div>
   </div>
   <nav class="month-nav" id="monthNav"></nav>
 </header>
@@ -1031,7 +1061,7 @@ function renderRank() {
   document.getElementById('rankWrap').innerHTML = sorted.map(a => {
     const isPos = a.delta >= 0;
     const barW  = maxAbs > 0 ? (Math.abs(a.delta) / maxAbs * 100).toFixed(1) : 0;
-    const color = isPos ? 'var(--accent)' : 'var(--accent2)';
+    const color = isPos ? 'var(--pos)' : 'var(--neg)';
     const sign  = isPos ? '+' : '';
     return `
       <div class="bar-row" style="gap:6px;">
@@ -1066,7 +1096,7 @@ function renderRankEuro() {
   document.getElementById('rankWrapEuro').innerHTML = sorted.map(a => {
     const isPos = a.delta >= 0;
     const barW  = maxAbs > 0 ? (Math.abs(a.delta) / maxAbs * 100).toFixed(1) : 0;
-    const color = isPos ? 'var(--accent)' : 'var(--accent2)';
+    const color = isPos ? 'var(--pos)' : 'var(--neg)';
     const sign  = isPos ? '+' : '';
     return `
       <div class="bar-row" style="gap:6px;">
@@ -1145,15 +1175,15 @@ function makeSimpleChart(canvasId, data26, data25, color26, color25) {
       plugins: {
         legend:{ display:true, labels:{ color:'#6b6b88', font:{ family:'DM Mono', size:10 }, boxWidth:10, padding:14 } },
         tooltip:{
-          backgroundColor:'#16161f', borderColor:'#1e1e2e', borderWidth:1,
-          titleColor:'#6b6b88', bodyColor:'#e8e8f0',
+          backgroundColor:'#ffffff', borderColor:'#e3e3ea', borderWidth:1,
+          titleColor:'#73737f', bodyColor:'#2b2b2e',
           titleFont:{ family:'DM Mono', size:11 }, bodyFont:{ family:'DM Mono', size:11 }, padding:10,
           callbacks:{ label: ctx => ctx.raw == null ? ` ${ctx.dataset.label}: n/d` : ` ${ctx.dataset.label}: ${fmtFull(ctx.raw)}` }
         }
       },
       scales: {
-        x:{ grid:{color:'rgba(30,30,46,0.6)'}, ticks:{color:'#6b6b88',font:{family:'DM Mono',size:10}} },
-        y:{ grid:{color:'rgba(30,30,46,0.6)'}, ticks:{color:'#6b6b88',font:{family:'DM Mono',size:10},callback:v=>'€'+(v/1000).toFixed(0)+'k'} }
+        x:{ grid:{color:'rgba(0,0,0,0.07)'}, ticks:{color:'#6b6b88',font:{family:'DM Mono',size:10}} },
+        y:{ grid:{color:'rgba(0,0,0,0.07)'}, ticks:{color:'#6b6b88',font:{family:'DM Mono',size:10},callback:v=>'€'+(v/1000).toFixed(0)+'k'} }
       }
     }
   });
@@ -1224,9 +1254,9 @@ function renderDirezione() {
   }
 
   dirChart = makeSimpleChart('dirChart', d26Dir, d25Dir,
-    'rgba(124,111,247,0.85)', 'rgba(124,111,247,0.2)');
+    'rgba(152,0,94,0.85)', 'rgba(152,0,94,0.2)');
   trChart  = makeSimpleChart('trChart',  d26Tr,  d25Tr,
-    'rgba(255,214,10,0.8)',   'rgba(255,214,10,0.2)');
+    'rgba(232,160,0,0.85)',   'rgba(232,160,0,0.2)');
 }
 
 // ── GRAFICO ───────────────────────────────────────────────────────────────────
@@ -1269,14 +1299,14 @@ function buildChart() {
           label: 'Fatturato 2026',
           data: data26,
           backgroundColor: ctx => MONTHS[ctx.dataIndex] === currentMonth
-            ? '#00e5a0' : 'rgba(0,229,160,0.3)',
+            ? '#E6007E' : 'rgba(230,0,126,0.30)',
           borderRadius: 3,
           order: 1,
         },
         {
           label: 'Fatturato 2025',
           data: data25,
-          backgroundColor: 'rgba(255,255,255,0.06)',
+          backgroundColor: 'rgba(60,60,59,0.12)',
           borderRadius: 3,
           order: 2,
         },
@@ -1284,10 +1314,10 @@ function buildChart() {
           label: 'Delta €',
           data: dataDelta,
           type: 'line',
-          borderColor: '#ffd60a',
-          backgroundColor: 'rgba(255,214,10,0.08)',
+          borderColor: '#e8a000',
+          backgroundColor: 'rgba(232,160,0,0.08)',
           borderWidth: 2,
-          pointBackgroundColor: '#ffd60a',
+          pointBackgroundColor: '#e8a000',
           pointRadius: 3,
           tension: 0.4,
           yAxisID: 'y2',
@@ -1299,10 +1329,10 @@ function buildChart() {
           label: 'Delta %',
           data: dataDeltaPct,
           type: 'line',
-          borderColor: '#7c6ff7',
-          backgroundColor: 'rgba(124,111,247,0.08)',
+          borderColor: '#98005e',
+          backgroundColor: 'rgba(152,0,94,0.08)',
           borderWidth: 2,
-          pointBackgroundColor: '#7c6ff7',
+          pointBackgroundColor: '#98005e',
           pointRadius: 3,
           tension: 0.4,
           yAxisID: 'y3',
@@ -1314,7 +1344,7 @@ function buildChart() {
           label: 'Media Δ€',
           data: lineAvgDelta,
           type: 'line',
-          borderColor: 'rgba(255,214,10,0.55)',
+          borderColor: 'rgba(232,160,0,0.55)',
           borderWidth: 1.5,
           borderDash: [6, 4],
           pointRadius: 0,
@@ -1327,7 +1357,7 @@ function buildChart() {
           label: 'Media Δ%',
           data: lineAvgPct,
           type: 'line',
-          borderColor: 'rgba(124,111,247,0.55)',
+          borderColor: 'rgba(152,0,94,0.5)',
           borderWidth: 1.5,
           borderDash: [6, 4],
           pointRadius: 0,
@@ -1340,10 +1370,10 @@ function buildChart() {
           label: 'Media prog. Δ€',
           data: lineRunDelta,
           type: 'line',
-          borderColor: 'rgba(255,140,66,0.85)',
+          borderColor: 'rgba(205,95,10,0.9)',
           borderWidth: 1.5,
           borderDash: [2, 3],
-          pointBackgroundColor: 'rgba(255,140,66,0.85)',
+          pointBackgroundColor: 'rgba(205,95,10,0.9)',
           pointRadius: 2,
           tension: 0.3,
           fill: false,
@@ -1356,10 +1386,10 @@ function buildChart() {
           label: 'Media prog. Δ%',
           data: lineRunPct,
           type: 'line',
-          borderColor: 'rgba(0,209,255,0.85)',
+          borderColor: 'rgba(0,133,170,0.9)',
           borderWidth: 1.5,
           borderDash: [2, 3],
-          pointBackgroundColor: 'rgba(0,209,255,0.85)',
+          pointBackgroundColor: 'rgba(0,133,170,0.9)',
           pointRadius: 2,
           tension: 0.3,
           fill: false,
@@ -1377,11 +1407,11 @@ function buildChart() {
       plugins: {
         legend: { display: false },
         tooltip: {
-          backgroundColor: '#16161f',
-          borderColor: '#1e1e2e',
+          backgroundColor: '#ffffff',
+          borderColor: '#e3e3ea',
           borderWidth: 1,
           titleColor: '#6b6b88',
-          bodyColor: '#e8e8f0',
+          bodyColor: '#2b2b2e',
           titleFont: { family: 'DM Mono', size: 11 },
           bodyFont:  { family: 'DM Mono', size: 11 },
           padding: 10,
@@ -1396,11 +1426,11 @@ function buildChart() {
       },
       scales: {
         x: {
-          grid: { color: 'rgba(30,30,46,0.6)' },
+          grid: { color: 'rgba(0,0,0,0.07)' },
           ticks: { color: '#6b6b88', font: { family: 'DM Mono', size: 10 } }
         },
         y: {
-          grid: { color: 'rgba(30,30,46,0.6)' },
+          grid: { color: 'rgba(0,0,0,0.07)' },
           ticks: {
             color: '#6b6b88',
             font: { family: 'DM Mono', size: 10 },
@@ -1409,12 +1439,12 @@ function buildChart() {
         },
         y2: {
           display: false, position: 'right',
-          grid: { color: 'rgba(30,30,46,0.6)' },
+          grid: { color: 'rgba(0,0,0,0.07)' },
           ticks: { color: '#6b6b88', font: { family: 'DM Mono', size: 10 }, callback: v => '€' + (v/1000).toFixed(0) + 'k' }
         },
         y3: {
           display: false, position: 'right',
-          grid: { color: 'rgba(30,30,46,0.6)' },
+          grid: { color: 'rgba(0,0,0,0.07)' },
           ticks: { color: '#6b6b88', font: { family: 'DM Mono', size: 10 }, callback: v => (v >= 0 ? '+' : '') + v.toFixed(0) + '%' }
         }
       }
@@ -1512,14 +1542,14 @@ function renderAgentYear() {
         {
           label: '2026',
           data: d26,
-          backgroundColor: ctx => d26[ctx.dataIndex] != null ? 'rgba(124,111,247,0.75)' : 'rgba(107,107,136,0.15)',
+          backgroundColor: ctx => d26[ctx.dataIndex] != null ? '#E6007E' : 'rgba(115,115,127,0.15)',
           borderRadius: 3,
           order: 1,
         },
         {
           label: '2025',
           data: d25,
-          backgroundColor: 'rgba(255,255,255,0.06)',
+          backgroundColor: 'rgba(60,60,59,0.12)',
           borderRadius: 3,
           order: 2,
         },
@@ -1535,11 +1565,11 @@ function renderAgentYear() {
           labels: { color: '#6b6b88', font: { family: 'DM Mono', size: 10 }, boxWidth: 10, padding: 16 }
         },
         tooltip: {
-          backgroundColor: '#16161f',
-          borderColor: '#1e1e2e',
+          backgroundColor: '#ffffff',
+          borderColor: '#e3e3ea',
           borderWidth: 1,
           titleColor: '#6b6b88',
-          bodyColor: '#e8e8f0',
+          bodyColor: '#2b2b2e',
           titleFont: { family: 'DM Mono', size: 11 },
           bodyFont:  { family: 'DM Mono', size: 11 },
           padding: 10,
@@ -1552,11 +1582,11 @@ function renderAgentYear() {
       },
       scales: {
         x: {
-          grid: { color: 'rgba(30,30,46,0.6)' },
+          grid: { color: 'rgba(0,0,0,0.07)' },
           ticks: { color: '#6b6b88', font: { family: 'DM Mono', size: 10 } }
         },
         y: {
-          grid: { color: 'rgba(30,30,46,0.6)' },
+          grid: { color: 'rgba(0,0,0,0.07)' },
           ticks: {
             color: '#6b6b88',
             font: { family: 'DM Mono', size: 10 },
