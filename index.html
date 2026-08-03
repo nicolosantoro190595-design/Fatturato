@@ -534,6 +534,7 @@ break;case"<bookViews":;case"<bookViews>":;case"</bookViews>":break;case"<workbo
         <button class="filter-btn active" onclick="setChartFilter(this,'both')">2026 + 2025</button>
         <button class="filter-btn" onclick="setChartFilter(this,'2026')">Solo 2026</button>
         <button class="filter-btn" onclick="setChartFilter(this,'delta')">Delta €</button>
+        <button class="filter-btn" onclick="setChartFilter(this,'deltapct')">Delta %</button>
       </div>
       <canvas id="trendChart"></canvas>
     </div>
@@ -1237,6 +1238,9 @@ function buildChart() {
   const dataDelta = MONTHS.map(m =>
     monthlyTotals[m].f26 != null ? monthlyTotals[m].f26 - monthlyTotals[m].f25 : null
   );
+  const dataDeltaPct = MONTHS.map(m =>
+    (monthlyTotals[m].f26 != null && monthlyTotals[m].f25) ? (monthlyTotals[m].f26 - monthlyTotals[m].f25) / monthlyTotals[m].f25 * 100 : null
+  );
 
   trendChart = new Chart(ctx, {
     type: 'bar',
@@ -1272,6 +1276,21 @@ function buildChart() {
           hidden: true,
           order: 0,
           spanGaps: false,
+        },
+        {
+          label: 'Delta %',
+          data: dataDeltaPct,
+          type: 'line',
+          borderColor: '#7c6ff7',
+          backgroundColor: 'rgba(124,111,247,0.08)',
+          borderWidth: 2,
+          pointBackgroundColor: '#7c6ff7',
+          pointRadius: 3,
+          tension: 0.4,
+          yAxisID: 'y3',
+          hidden: true,
+          order: 0,
+          spanGaps: false,
         }
       ]
     },
@@ -1293,6 +1312,7 @@ function buildChart() {
           callbacks: {
             label: ctx => {
               if (ctx.raw == null) return ` ${ctx.dataset.label}: n/d`;
+              if (ctx.dataset.label === 'Delta %') return ` ${ctx.dataset.label}: ${(ctx.raw >= 0 ? '+' : '')}${ctx.raw.toFixed(1)}%`;
               return ` ${ctx.dataset.label}: ${fmtFull(ctx.raw)}`;
             }
           }
@@ -1311,7 +1331,16 @@ function buildChart() {
             callback: v => '€' + (v/1000) + 'k'
           }
         },
-        y2: { display: false, position: 'right' }
+        y2: {
+          display: false, position: 'right',
+          grid: { color: 'rgba(30,30,46,0.6)' },
+          ticks: { color: '#6b6b88', font: { family: 'DM Mono', size: 10 }, callback: v => '€' + (v/1000).toFixed(0) + 'k' }
+        },
+        y3: {
+          display: false, position: 'right',
+          grid: { color: 'rgba(30,30,46,0.6)' },
+          ticks: { color: '#6b6b88', font: { family: 'DM Mono', size: 10 }, callback: v => (v >= 0 ? '+' : '') + v.toFixed(0) + '%' }
+        }
       }
     }
   });
@@ -1321,9 +1350,17 @@ function setChartFilter(btn, filter) {
   document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   const ds = trendChart.data.datasets;
-  if (filter === 'both')  { ds[0].hidden=false; ds[1].hidden=false; ds[2].hidden=true; trendChart.options.scales.y2.display=false; }
-  if (filter === '2026')  { ds[0].hidden=false; ds[1].hidden=true;  ds[2].hidden=true; trendChart.options.scales.y2.display=false; }
-  if (filter === 'delta') { ds[0].hidden=true;  ds[1].hidden=true;  ds[2].hidden=false; trendChart.options.scales.y2.display=true; }
+  const sc = trendChart.options.scales;
+  const show = {
+    both:     [true,  true,  false, false],
+    '2026':   [true,  false, false, false],
+    delta:    [false, false, true,  false],
+    deltapct: [false, false, false, true],
+  }[filter];
+  ds.forEach((d, i) => d.hidden = !show[i]);
+  sc.y.display  = show[0] || show[1];  // fix: asse € nascosto in modalità delta
+  sc.y2.display = show[2];
+  sc.y3.display = show[3];
   trendChart.update();
 }
 
