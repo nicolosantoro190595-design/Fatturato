@@ -1241,6 +1241,24 @@ function buildChart() {
   const dataDeltaPct = MONTHS.map(m =>
     (monthlyTotals[m].f26 != null && monthlyTotals[m].f25) ? (monthlyTotals[m].f26 - monthlyTotals[m].f25) / monthlyTotals[m].f25 * 100 : null
   );
+  // Media delle crescite (solo mesi con dati 2026)
+  const dValid   = dataDelta.filter(v => v != null);
+  const pValid   = dataDeltaPct.filter(v => v != null);
+  const avgDelta = dValid.length ? dValid.reduce((s,v)=>s+v,0) / dValid.length : null;
+  const avgPct   = pValid.length ? pValid.reduce((s,v)=>s+v,0) / pValid.length : null;
+  const lineAvgDelta = MONTHS.map(() => avgDelta);
+  const lineAvgPct   = MONTHS.map(() => avgPct);
+  // Media progressiva: in ogni mese, media dei delta da gennaio a quel mese
+  const runAvg = arr => {
+    let sum = 0, n = 0;
+    return arr.map(v => {
+      if (v == null) return null;
+      sum += v; n++;
+      return sum / n;
+    });
+  };
+  const lineRunDelta = runAvg(dataDelta);
+  const lineRunPct   = runAvg(dataDeltaPct);
 
   trendChart = new Chart(ctx, {
     type: 'bar',
@@ -1291,6 +1309,64 @@ function buildChart() {
           hidden: true,
           order: 0,
           spanGaps: false,
+        },
+        {
+          label: 'Media Δ€',
+          data: lineAvgDelta,
+          type: 'line',
+          borderColor: 'rgba(255,214,10,0.55)',
+          borderWidth: 1.5,
+          borderDash: [6, 4],
+          pointRadius: 0,
+          fill: false,
+          yAxisID: 'y2',
+          hidden: true,
+          order: 0,
+        },
+        {
+          label: 'Media Δ%',
+          data: lineAvgPct,
+          type: 'line',
+          borderColor: 'rgba(124,111,247,0.55)',
+          borderWidth: 1.5,
+          borderDash: [6, 4],
+          pointRadius: 0,
+          fill: false,
+          yAxisID: 'y3',
+          hidden: true,
+          order: 0,
+        },
+        {
+          label: 'Media prog. Δ€',
+          data: lineRunDelta,
+          type: 'line',
+          borderColor: 'rgba(255,140,66,0.85)',
+          borderWidth: 1.5,
+          borderDash: [2, 3],
+          pointBackgroundColor: 'rgba(255,140,66,0.85)',
+          pointRadius: 2,
+          tension: 0.3,
+          fill: false,
+          yAxisID: 'y2',
+          hidden: true,
+          order: 0,
+          spanGaps: false,
+        },
+        {
+          label: 'Media prog. Δ%',
+          data: lineRunPct,
+          type: 'line',
+          borderColor: 'rgba(0,209,255,0.85)',
+          borderWidth: 1.5,
+          borderDash: [2, 3],
+          pointBackgroundColor: 'rgba(0,209,255,0.85)',
+          pointRadius: 2,
+          tension: 0.3,
+          fill: false,
+          yAxisID: 'y3',
+          hidden: true,
+          order: 0,
+          spanGaps: false,
         }
       ]
     },
@@ -1312,7 +1388,7 @@ function buildChart() {
           callbacks: {
             label: ctx => {
               if (ctx.raw == null) return ` ${ctx.dataset.label}: n/d`;
-              if (ctx.dataset.label === 'Delta %') return ` ${ctx.dataset.label}: ${(ctx.raw >= 0 ? '+' : '')}${ctx.raw.toFixed(1)}%`;
+              if (ctx.dataset.label.includes('%')) return ` ${ctx.dataset.label}: ${(ctx.raw >= 0 ? '+' : '')}${ctx.raw.toFixed(1)}%`;
               return ` ${ctx.dataset.label}: ${fmtFull(ctx.raw)}`;
             }
           }
@@ -1352,10 +1428,10 @@ function setChartFilter(btn, filter) {
   const ds = trendChart.data.datasets;
   const sc = trendChart.options.scales;
   const show = {
-    both:     [true,  true,  false, false],
-    '2026':   [true,  false, false, false],
-    delta:    [false, false, true,  false],
-    deltapct: [false, false, false, true],
+    both:     [true,  true,  false, false, false, false, false, false],
+    '2026':   [true,  false, false, false, false, false, false, false],
+    delta:    [false, false, true,  false, true,  false, true,  false],
+    deltapct: [false, false, false, true,  false, true,  false, true ],
   }[filter];
   ds.forEach((d, i) => d.hidden = !show[i]);
   sc.y.display  = show[0] || show[1];  // fix: asse € nascosto in modalità delta
