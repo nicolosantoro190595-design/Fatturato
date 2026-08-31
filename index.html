@@ -659,36 +659,53 @@ const monthlyTotals = {
   MAGGIO:    { f26:    1622908.16, f25:  1591402.21 },
   GIUGNO:    { f26:    1383071.97, f25:  1183039.33 },
   LUGLIO:    { f26: 1326260.67, f25:  1197249.34 },
-  AGOSTO:    { f26:          null, f25:   482474.29 },
+  AGOSTO:    { f26:    513606.37, f25:   482474.29 },
   SETTEMBRE: { f26:          null, f25:  1276008.06 },
   OTTOBRE:   { f26:          null, f25:  1547190.55 },
   NOVEMBRE:  { f26:          null, f25:   1374184.7 },
   DICEMBRE:  { f26:          null, f25:  1062524.92 },
 };
 
+
+const monthlyBudget = {
+  GENNAIO:    1319377.35,
+  FEBBRAIO:   1141390.8,
+  MARZO:      1165985.74,
+  APRILE:     1083137.05,
+  MAGGIO:     1634290.6,
+  GIUGNO:     1224206.36,
+  LUGLIO:     1218802.3,
+  AGOSTO:     497076.06,
+  SETTEMBRE:  1318494.32,
+  OTTOBRE:    1319377.35,
+  NOVEMBRE:   1319377.35,
+  DICEMBRE:   1319377.35,
+};
+// NOTA: budget OTT/NOV/DIC = placeholder copiato da gennaio nel file Excel.
+
 const agentsMaggio = [
-    { agente:'ROSSO', zona:'CALABRIA', f26:43584.33, f25:43111.88, bud:45267.47 },
-    { agente:'FERRARA', zona:'PIEMONTE', f26:102347.54, f25:112072.49, bud:117676.11 },
-    { agente:'BARONI', zona:'LIGURIA', f26:72398.09, f25:66499.06, bud:69824.01 },
-    { agente:'MERCURI - BERNUZZI', zona:'LOMBARDIA', f26:94313.78, f25:98797.77, bud:103737.66 },
-    { agente:'FIORA - PIGHETTI', zona:'LOMBARDIA', f26:78075.28, f25:56315.95, bud:59131.75 },
-    { agente:'FIORA - PIGHETTI (PV-LO)', zona:'LOMBARDIA', f26:5687.51, f25:2459.7, bud:2582.68 },
-    { agente:'INFOMED', zona:'VENETO FRIULI VENEZIA GIULIA', f26:172644.3, f25:117413.21, bud:123283.87 },
-    { agente:'MEDICAL TEAM TRADE', zona:'EMILIA ROMAGNA', f26:176566.84, f25:145318.13, bud:152584.04 },
-    { agente:'MARCHESINI', zona:'EMILIA ROMAGNA', f26:54598.61, f25:48983.15, bud:51432.31 },
-    { agente:'TOSCANA NORD', zona:'TOSCANA', f26:24377.06, f25:24499.05, bud:25724 },
-    { agente:'TOSCANA SUD', zona:'TOSCANA', f26:25064.62, f25:16197.01, bud:17006.86 },
-    { agente:'SOLUSTRI', zona:'MARCHE', f26:19747.04, f25:15295.38, bud:16060.15 },
-    { agente:'ZECCHINI - POMPEI', zona:'ABRUZZO-MOLISE', f26:4900.63, f25:7323.89, bud:7690.08 },
-    { agente:'LOIUDICE - SPADAVECCHIA', zona:'PUGLIA', f26:47663.08, f25:44623.48, bud:46854.65 },
-    { agente:'LOIUDICE', zona:'PUGLIA', f26:23397.48, f25:18111.55, bud:19017.13 },
-    { agente:'SCOTTONI', zona:'LAZIO', f26:78597.72, f25:90984.85, bud:95534.09 },
-    { agente:'SALVATI', zona:'CAMPANIA', f26:147724.31, f25:148733.46, bud:156170.13 },
-    { agente:'BENNICI', zona:'SICILIA', f26:22914.03, f25:22222.07, bud:23333.17 },
-    { agente:'PESCE - ALBANO', zona:'SICILIA', f26:56098.48, f25:36873.08, bud:38716.73 },
-    { agente:'ALECCI', zona:'SICILIA', f26:15448.36, f25:13776.35, bud:14465.17 },
-    { agente:'ATZENI', zona:'SARDEGNA', f26:16964.61, f25:14172.63, bud:14881.26 },
-    { agente:'MANFREDI', zona:'UMBRIA', f26:16072.16, f25:16979.96, bud:17828.96 },
+    { agente:'ROSSO', zona:'CALABRIA', f26:17938.33, f25:16419.52, bud:17240.5 },
+    { agente:'FERRARA', zona:'PIEMONTE', f26:37721.47, f25:40633.2, bud:42664.86 },
+    { agente:'BARONI', zona:'LIGURIA', f26:22370.52, f25:25660.03, bud:26943.03 },
+    { agente:'MERCURI - BERNUZZI', zona:'LOMBARDIA', f26:37127.92, f25:37820.63, bud:39711.66 },
+    { agente:'FIORA - PIGHETTI', zona:'LOMBARDIA', f26:36037.97, f25:33707.27, bud:35392.63 },
+    { agente:'FIORA - PIGHETTI (PV-LO)', zona:'LOMBARDIA', f26:5231.81, f25:781.07, bud:820.12 },
+    { agente:'INFOMED', zona:'VENETO FRIULI VENEZIA GIULIA', f26:62428.87, f25:58912.66, bud:61858.29 },
+    { agente:'MEDICAL TEAM TRADE', zona:'EMILIA ROMAGNA', f26:66412.4, f25:67870.99, bud:71264.54 },
+    { agente:'MARCHESINI', zona:'EMILIA ROMAGNA', f26:22086.77, f25:13376.34, bud:14045.16 },
+    { agente:'TOSCANA NORD', zona:'TOSCANA', f26:13701.4, f25:11090.39, bud:11644.91 },
+    { agente:'TOSCANA SUD', zona:'TOSCANA', f26:6572.21, f25:5547.3, bud:5824.66 },
+    { agente:'SOLUSTRI', zona:'MARCHE', f26:9001.48, f25:10077.53, bud:10581.41 },
+    { agente:'ZECCHINI - POMPEI', zona:'ABRUZZO-MOLISE', f26:2352.54, f25:1972.81, bud:2071.45 },
+    { agente:'LOIUDICE - SPADAVECCHIA', zona:'PUGLIA', f26:16385.19, f25:15654.41, bud:16437.13 },
+    { agente:'LOIUDICE', zona:'PUGLIA', f26:10528.46, f25:8596.24, bud:9026.05 },
+    { agente:'SCOTTONI', zona:'LAZIO', f26:29674.96, f25:29846.74, bud:31339.08 },
+    { agente:'SALVATI', zona:'CAMPANIA', f26:64389.73, f25:62932.59, bud:66079.22 },
+    { agente:'BENNICI', zona:'SICILIA', f26:6862.26, f25:6241.33, bud:6553.4 },
+    { agente:'PESCE - ALBANO', zona:'SICILIA', f26:21771.46, f25:10996.24, bud:11546.05 },
+    { agente:'ALECCI', zona:'SICILIA', f26:4448.91, f25:4751.36, bud:4988.93 },
+    { agente:'ATZENI', zona:'SARDEGNA', f26:3942.68, f25:3601.46, bud:3781.53 },
+    { agente:'MANFREDI', zona:'UMBRIA', f26:7716.61, f25:6915.66, bud:7261.44 },
 ];
 
 const agentsByMonth = {
@@ -836,36 +853,60 @@ const agentsByMonth = {
     { agente:'ATZENI', zona:'SARDEGNA', f26:17160.73, f25:19723.26, bud:20709.42 },
     { agente:'MANFREDI', zona:'UMBRIA', f26:19543.88, f25:12751.15, bud:13388.71 },
   ],
-  LUGLIO: agentsMaggio,
+  LUGLIO: [
+    { agente:'ROSSO', zona:'CALABRIA', f26:43584.33, f25:43111.88, bud:45267.47 },
+    { agente:'FERRARA', zona:'PIEMONTE', f26:102347.54, f25:112072.49, bud:117676.11 },
+    { agente:'BARONI', zona:'LIGURIA', f26:72398.09, f25:66499.06, bud:69824.01 },
+    { agente:'MERCURI - BERNUZZI', zona:'LOMBARDIA', f26:94313.78, f25:98797.77, bud:103737.66 },
+    { agente:'FIORA - PIGHETTI', zona:'LOMBARDIA', f26:78075.28, f25:56315.95, bud:59131.75 },
+    { agente:'FIORA - PIGHETTI (PV-LO)', zona:'LOMBARDIA', f26:5687.51, f25:2459.7, bud:2582.68 },
+    { agente:'INFOMED', zona:'VENETO FRIULI VENEZIA GIULIA', f26:172644.3, f25:117413.21, bud:123283.87 },
+    { agente:'MEDICAL TEAM TRADE', zona:'EMILIA ROMAGNA', f26:176566.84, f25:145318.13, bud:152584.04 },
+    { agente:'MARCHESINI', zona:'EMILIA ROMAGNA', f26:54598.61, f25:48983.15, bud:51432.31 },
+    { agente:'TOSCANA NORD', zona:'TOSCANA', f26:24377.06, f25:24499.05, bud:25724.0 },
+    { agente:'TOSCANA SUD', zona:'TOSCANA', f26:25064.62, f25:16197.01, bud:17006.86 },
+    { agente:'SOLUSTRI', zona:'MARCHE', f26:19747.04, f25:15295.38, bud:16060.15 },
+    { agente:'ZECCHINI - POMPEI', zona:'ABRUZZO-MOLISE', f26:4900.63, f25:7323.89, bud:7690.08 },
+    { agente:'LOIUDICE - SPADAVECCHIA', zona:'PUGLIA', f26:47663.08, f25:44623.48, bud:46854.65 },
+    { agente:'LOIUDICE', zona:'PUGLIA', f26:23397.48, f25:18111.55, bud:19017.13 },
+    { agente:'SCOTTONI', zona:'LAZIO', f26:78597.72, f25:90984.85, bud:95534.09 },
+    { agente:'SALVATI', zona:'CAMPANIA', f26:147724.31, f25:148733.46, bud:156170.13 },
+    { agente:'BENNICI', zona:'SICILIA', f26:22914.03, f25:22222.07, bud:23333.17 },
+    { agente:'PESCE - ALBANO', zona:'SICILIA', f26:56098.48, f25:36873.08, bud:38716.73 },
+    { agente:'ALECCI', zona:'SICILIA', f26:15448.36, f25:13776.35, bud:14465.17 },
+    { agente:'ATZENI', zona:'SARDEGNA', f26:16964.61, f25:14172.63, bud:14881.26 },
+    { agente:'MANFREDI', zona:'UMBRIA', f26:16072.16, f25:16979.96, bud:17828.96 },
+  ],
+  AGOSTO: agentsMaggio,
 };
 
 const generalAgents = [
-  { agente:'ROSSO', zona:'CALABRIA', ytd:304026 },
-  { agente:'FERRARA', zona:'PIEMONTE', ytd:754201 },
-  { agente:'BARONI', zona:'LIGURIA', ytd:466811 },
-  { agente:'MERCURI - BERNUZZI', zona:'LOMBARDIA', ytd:726752 },
-  { agente:'FIORA - PIGHETTI', zona:'LOMBARDIA', ytd:498466 },
-  { agente:'FIORA - PIGHETTI (PV-LO)', zona:'LOMBARDIA', ytd:30933 },
-  { agente:'INFOMED', zona:'VENETO FRIULI VENEZIA GIULIA', ytd:1088160 },
-  { agente:'MEDICAL TEAM TRADE', zona:'EMILIA ROMAGNA', ytd:1262383 },
-  { agente:'MARCHESINI', zona:'EMILIA ROMAGNA', ytd:370002 },
-  { agente:'TOSCANA NORD', zona:'TOSCANA', ytd:180608 },
-  { agente:'TOSCANA SUD', zona:'TOSCANA', ytd:134144 },
-  { agente:'SOLUSTRI', zona:'MARCHE', ytd:136259 },
-  { agente:'ZECCHINI - POMPEI', zona:'ABRUZZO-MOLISE', ytd:29874 },
-  { agente:'LOIUDICE - SPADAVECCHIA', zona:'PUGLIA', ytd:295244 },
-  { agente:'LOIUDICE', zona:'PUGLIA', ytd:156258 },
-  { agente:'SCOTTONI', zona:'LAZIO', ytd:749986 },
-  { agente:'SALVATI', zona:'CAMPANIA', ytd:1341478 },
-  { agente:'BENNICI', zona:'SICILIA', ytd:170521 },
-  { agente:'PESCE - ALBANO', zona:'SICILIA', ytd:364900 },
-  { agente:'ALECCI', zona:'SICILIA', ytd:104090 },
-  { agente:'ATZENI', zona:'SARDEGNA', ytd:109320 },
-  { agente:'MANFREDI', zona:'UMBRIA', ytd:113429 },
+  { agente:'ROSSO', zona:'CALABRIA', ytd:321964 },
+  { agente:'FERRARA', zona:'PIEMONTE', ytd:791923 },
+  { agente:'BARONI', zona:'LIGURIA', ytd:489182 },
+  { agente:'MERCURI - BERNUZZI', zona:'LOMBARDIA', ytd:763880 },
+  { agente:'FIORA - PIGHETTI', zona:'LOMBARDIA', ytd:534504 },
+  { agente:'FIORA - PIGHETTI (PV-LO)', zona:'LOMBARDIA', ytd:36164 },
+  { agente:'INFOMED', zona:'VENETO FRIULI VENEZIA GIULIA', ytd:1150589 },
+  { agente:'MEDICAL TEAM TRADE', zona:'EMILIA ROMAGNA', ytd:1328796 },
+  { agente:'MARCHESINI', zona:'EMILIA ROMAGNA', ytd:392089 },
+  { agente:'TOSCANA NORD', zona:'TOSCANA', ytd:194309 },
+  { agente:'TOSCANA SUD', zona:'TOSCANA', ytd:140716 },
+  { agente:'SOLUSTRI', zona:'MARCHE', ytd:145260 },
+  { agente:'ZECCHINI - POMPEI', zona:'ABRUZZO-MOLISE', ytd:32227 },
+  { agente:'LOIUDICE - SPADAVECCHIA', zona:'PUGLIA', ytd:311629 },
+  { agente:'LOIUDICE', zona:'PUGLIA', ytd:166787 },
+  { agente:'SCOTTONI', zona:'LAZIO', ytd:779661 },
+  { agente:'SALVATI', zona:'CAMPANIA', ytd:1405868 },
+  { agente:'BENNICI', zona:'SICILIA', ytd:177384 },
+  { agente:'PESCE - ALBANO', zona:'SICILIA', ytd:386671 },
+  { agente:'ALECCI', zona:'SICILIA', ytd:108538 },
+  { agente:'ATZENI', zona:'SARDEGNA', ytd:113263 },
+  { agente:'MANFREDI', zona:'UMBRIA', ytd:121146 },
 ];
 
 const MONTHS = Object.keys(monthlyTotals);
-let currentMonth = 'LUGLIO';
+let currentMonth = 'AGOSTO';
 let trendChart;
 let agentYearChart;
 
@@ -877,7 +918,6 @@ agentsMaggio.forEach(a => { agentMonthly[a.agente] = {}; });
 // Popoliamo con i dati che abbiamo per ogni mese
 // Dati f25 reali per mesi futuri (da Excel)
 const agentF25Future = {
-  AGOSTO: {'ROSSO':16419.52,'FERRARA':40633.2,'BARONI':25660.03,'MERCURI - BERNUZZI':37820.63,'FIORA - PIGHETTI':33707.27,'FIORA - PIGHETTI (PV-LO)':781.07,'INFOMED':58912.66,'MEDICAL TEAM TRADE':67870.99,'MARCHESINI':13376.34,'TOSCANA NORD':11090.39,'TOSCANA SUD':5547.3,'SOLUSTRI':10077.53,'ZECCHINI - POMPEI':1972.81,'LOIUDICE - SPADAVECCHIA':15654.41,'LOIUDICE':8596.24,'SCOTTONI':29846.74,'SALVATI':62932.59,'BENNICI':6241.33,'PESCE - ALBANO':10996.24,'ALECCI':4751.36,'ATZENI':3601.46,'MANFREDI':6915.66},
   SETTEMBRE: {'ROSSO':40135.23,'FERRARA':89534.01,'BARONI':71811.58,'MERCURI - BERNUZZI':101425.65,'FIORA - PIGHETTI':61987.92,'FIORA - PIGHETTI (PV-LO)':3279.96,'INFOMED':129366.1,'MEDICAL TEAM TRADE':172156.23,'MARCHESINI':54652.66,'TOSCANA NORD':24143.48,'TOSCANA SUD':17873.78,'SOLUSTRI':20003.65,'ZECCHINI - POMPEI':7388.98,'LOIUDICE - SPADAVECCHIA':52466.36,'LOIUDICE':21157.41,'SCOTTONI':89972.78,'SALVATI':178531.4,'BENNICI':24689.11,'PESCE - ALBANO':53652.34,'ALECCI':13906.02,'ATZENI':14501.77,'MANFREDI':13072.46},
   OTTOBRE: {'ROSSO':56992.78,'FERRARA':122609.88,'BARONI':79152.53,'MERCURI - BERNUZZI':117169.28,'FIORA - PIGHETTI':73316.37,'FIORA - PIGHETTI (PV-LO)':5876.79,'INFOMED':155676.77,'MEDICAL TEAM TRADE':226525.88,'MARCHESINI':50099.26,'TOSCANA NORD':24881.91,'TOSCANA SUD':19516.62,'SOLUSTRI':20114.69,'ZECCHINI - POMPEI':7867.5,'LOIUDICE - SPADAVECCHIA':46625.76,'LOIUDICE':23327.98,'SCOTTONI':123046.35,'SALVATI':237002.24,'BENNICI':23655.6,'PESCE - ALBANO':64579.27,'ALECCI':19580.95,'ATZENI':16042.28,'MANFREDI':19479.75},
   NOVEMBRE: {'ROSSO':42360.74,'FERRARA':118336.02,'BARONI':68227.6,'MERCURI - BERNUZZI':95361.08,'FIORA - PIGHETTI':57202.47,'FIORA - PIGHETTI (PV-LO)':2634.51,'INFOMED':134096,'MEDICAL TEAM TRADE':161389.18,'MARCHESINI':60420.43,'TOSCANA NORD':31449.69,'TOSCANA SUD':16456.38,'SOLUSTRI':19713.87,'ZECCHINI - POMPEI':4580.45,'LOIUDICE - SPADAVECCHIA':43403.87,'LOIUDICE':20807.75,'SCOTTONI':116175.09,'SALVATI':229019.64,'BENNICI':20572.22,'PESCE - ALBANO':50832.59,'ALECCI':23011.39,'ATZENI':14961.74,'MANFREDI':19188.85},
@@ -891,7 +931,8 @@ const allMonthsAgentData = {
   APRILE:    agentsByMonth['APRILE']  || [],
   MAGGIO:    agentsByMonth['MAGGIO']  || [],
   GIUGNO:    agentsByMonth['GIUGNO']  || [],
-  LUGLIO:    agentsMaggio,
+  LUGLIO:    agentsByMonth['LUGLIO'] || [],
+  AGOSTO:    agentsMaggio,
 };
 
 MONTHS.forEach(m => {
@@ -975,8 +1016,9 @@ function renderKPI() {
 
   const meseName = currentMonth.charAt(0) + currentMonth.slice(1).toLowerCase();
 
-  // Budget YTD reale dal GENERALE (totale compressione gen-mag)
-  const budgetYtd = 6344181.55;
+  // Budget YTD calcolato dinamicamente sui mesi fino a quello selezionato
+  let budgetYtd = 0;
+  for (let i = 0; i <= mIdx; i++) budgetYtd += monthlyBudget[MONTHS[i]] || 0;
 
   const kpis = [
     {
@@ -1119,7 +1161,7 @@ const direzioneData = {
   MAGGIO:    { f26:  14316.22, f25:  21154.17 },
   GIUGNO:    { f26:   9758.03, f25:   2985.31 },
   LUGLIO:    { f26: 11863.21, f25:   21068.44 },
-  AGOSTO:    { f26:      null, f25:   1446.32 },
+  AGOSTO:    { f26:   1841.44, f25:   1446.32 },
   SETTEMBRE: { f26:      null, f25:   6239.91 },
   OTTOBRE:   { f26:      null, f25:   -1564.9 },
   NOVEMBRE:  { f26:      null, f25:   9120.28 },
@@ -1134,7 +1176,7 @@ const trasportoData = {
   MAGGIO:    { f26:   14241.2, f25:   13780.8 },
   GIUGNO:    { f26:  14926.52, f25:   14143.2 },
   LUGLIO:    { f26: 15211.6, f25:   15416.8 },
-  AGOSTO:    { f26:      null, f25:    7622.2 },
+  AGOSTO:    { f26:   7060.98, f25:    7622.2 },
   SETTEMBRE: { f26:      null, f25:  14059.27 },
   OTTOBRE:   { f26:      null, f25:  15615.01 },
   NOVEMBRE:  { f26:      null, f25:  14862.86 },
@@ -1149,7 +1191,7 @@ const extraData = {
   MAGGIO:    { f26:  28557.42, f25:  34934.97 },
   GIUGNO:    { f26:  24684.55, f25:  17128.51 },
   LUGLIO:    { f26: 27074.81, f25:   36485.24 },
-  AGOSTO:    { f26:      null, f25:   9068.52 },
+  AGOSTO:    { f26:   8902.42, f25:   9068.52 },
   SETTEMBRE: { f26:      null, f25:  20299.18 },
   OTTOBRE:   { f26:      null, f25:  14050.11 },
   NOVEMBRE:  { f26:      null, f25:  23983.14 },
